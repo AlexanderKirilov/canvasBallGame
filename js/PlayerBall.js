@@ -1,7 +1,15 @@
 function PlayerBall(spec){
-	this.speed = (spec && spec.speed) || 3;
-
 	Entity.call(this,spec);
+	
+	this.speed = (spec && spec.speed) || 1;
+	
+	this.isMovingUp = false;
+	this.isMovingRight = false;
+	this.isMovingDown = false;
+	this.isMovingLeft = false;
+
+	this.__hp = (spec && spec.hp) || 2;
+	this.score = (spec && spec.score) || 0;
 }
 
 //Inherit from Base class : Entity
@@ -10,19 +18,41 @@ PlayerBall.prototype.constructor = PlayerBall;
 
 PlayerBall.prototype.handleInput = function(event, boolean){
 
-	var pressedKey = event.key.toLowerCase();
-	switch(pressedKey){
-		case 'w':
-			this.y -= this.speed;
+	switch(event.code) {
+	    case "KeyS":
+	    case "ArrowDown":
+			// Handle "move down"
+			this.isMovingDown = boolean;
 			break;
-		case 'd':
-			this.x += this.speed;
+	    case "KeyW":
+	    case "ArrowUp":
+			// Handle "move up"
+			this.isMovingUp = boolean;
 			break;
-		case 's':
-			this.y += this.speed;
+	    case "KeyA":
+	    case "ArrowLeft":
+			// Handle "move left"
+			this.isMovingLeft = boolean;
 			break;
-		case 'a':
-			this.x -= this.speed;
+	    case "KeyD":
+	    case "ArrowRight":
+			// Handle "move right"
+			this.isMovingRight = boolean;
 			break;
+	}
+}
+
+PlayerBall.prototype.move = function(){
+	if(this.isMovingUp) {
+		this.y -= this.speed;
+	}	
+	if(this.isMovingDown) {
+		this.y += this.speed;
+	}
+	if(this.isMovingLeft) {
+		this.x -= this.speed;
+	}
+	if(this.isMovingRight) {
+		this.x += this.speed;
 	}
 }
